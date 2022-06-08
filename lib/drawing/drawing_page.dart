@@ -91,11 +91,21 @@ class DrawingPage extends GetView<DrawingController> {
     padding: EdgeInsets.fromLTRB(
       16, 12, 16, Get.mediaQuery.viewPadding.bottom + 12,
     ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-
-      ],
+    child: GetBuilder<DrawingController>(
+      id: _DrawingRefreshId.mainPanel,
+      builder: (controller) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: controller.color,
+              borderRadius: BorderRadius.circular(40),
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }

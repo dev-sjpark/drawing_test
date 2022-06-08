@@ -19,6 +19,9 @@ class DrawingController extends GetxController {
   /// 선 색상
   Color color = Colors.black;
 
+  /// 현재 선택된 메인 패널 아이템의 인덱스
+  int? selectedPanelIndex;
+
   /// 실제로 그려질 라인 목록
   final List<Line> lines = [];
 
@@ -50,9 +53,25 @@ class DrawingController extends GetxController {
 
   }
 
+  void onTapMainPanelItem(int index) {
+    selectedPanelIndex = index;
+    update([_DrawingRefreshId.mainPanel]);
+  }
+
 }
 
+/// 컨트롤 패널에 들어갈 아이템의 종류
+enum _ControlPanelType {
+  color,
+
+  width,
+
+  capType,
+}
+
+/// 업데이트를 위해 사용하는 id
 enum _DrawingRefreshId {
   painter,
-  controller,
+
+  mainPanel,
 }
