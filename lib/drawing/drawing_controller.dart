@@ -25,6 +25,12 @@ class DrawingController extends GetxController {
   /// 실제로 그려질 라인 목록
   final List<Line> lines = [];
 
+  final handSignatureControl = HandSignatureControl(
+    threshold: 2.0,
+    smoothRatio: 0.65,
+    velocityRange: 2.0,
+  );
+
   /// 스케일 제스처 시작시 호출되는 콜백
   void onScaleStart(ScaleStartDetails details) {
     if (details.pointerCount == 1) {
@@ -37,6 +43,7 @@ class DrawingController extends GetxController {
       ));
       update([_DrawingRefreshId.painter]);
     }
+
   }
 
   /// 스케일 제스처의 변경 이벤트 콜백
@@ -46,11 +53,21 @@ class DrawingController extends GetxController {
       last.add(details.localFocalPoint);
       update([_DrawingRefreshId.painter]);
     }
+    // using two finger
+    else if (details.pointerCount == 2) {
+      final scale = details.scale;
+      final localPoint = details.localFocalPoint;
+      log('two finger scale change: $scale, point: ${localPoint.dx}, ${localPoint.dy}');
+    }
   }
 
   /// 스케일 제스처 종료 이벤트 콜백
   void onScaleEnd(ScaleEndDetails details) {
-
+    if (details.pointerCount == 1) {
+      final last = lines.last;
+      last.isDrawing = false;
+      update([_DrawingRefreshId.painter]);
+    }
   }
 
   void onTapMainPanelItem(ControlPanelType type) {

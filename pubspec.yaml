@@ -33,6 +33,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.6.5
   flutter_colorpicker: ^1.0.3
+  hand_signature: ^2.2.0
 
 dev_dependencies:
   flutter_test:

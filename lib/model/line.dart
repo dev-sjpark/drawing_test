@@ -24,6 +24,12 @@ class Line {
   /// 라인 연결점
   final List<Offset> points = [];
 
+  /// 부드러움 정도
+  final smoothness = 1.3;
+
+  /// 그려지고 있는지 확인한다.
+  bool isDrawing = true;
+
   void add(Offset offset) {
     points.add(offset);
   }
@@ -41,8 +47,10 @@ class Line {
   void draw(Canvas canvas, Size size) {
     if (points.length == 1) {
       _drawVertices(canvas);
-    } else if (points.length > 2) {
+    } else if (points.length < 3) {
       _drawStraightLine(canvas, size);
+    } else {
+      _drawCurveLine(canvas, size);
     }
   }
 
@@ -69,6 +77,41 @@ class Line {
         path.lineTo(p.dx, p.dy);
       }
     }
+    canvas.drawPath(path, paint);
+  }
+
+  void _drawCurveLine(Canvas canvas, Size size) {
+    final path = Path();
+
+    final size = points.length;
+    for (int i = 0; i < size - 1; i ++) {
+      for (int i = 0; i < points.length - 1; i++) {
+        Offset current = points[i];
+        Offset next = points[i+1];
+        if (i == 0) {
+          path.moveTo(current.dx, current.dy);
+
+          double ctrlX = current.dx + (next.dx - current.dx)/2;
+          double ctrlY = next.dy;
+          path.quadraticBezierTo(ctrlX, ctrlY, next.dx, next.dy);
+        } else if (i < points.length - 2) {
+          //  1
+          double ctrl1X = current.dx + (next.dx - current.dx)/2;
+          double ctrl1Y = current.dy;
+          //  2
+          double ctrl2X = ctrl1X;
+          double ctrl2Y = next.dy;
+          path.cubicTo(ctrl1X,ctrl1Y,ctrl2X,ctrl2Y,next.dx,next.dy);
+        }else{
+          path.moveTo(current.dx, current.dy);
+
+          double ctrlX = current.dx + (next.dx - current.dx)/2;
+          double ctrlY = current.dy;
+          path.quadraticBezierTo(ctrlX, ctrlY, next.dx, next.dy);
+        }
+      }
+    }
+
     canvas.drawPath(path, paint);
   }
 

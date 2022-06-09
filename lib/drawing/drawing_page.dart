@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
+import 'package:hand_signature/signature.dart';
 import '../extensions.dart';
 import '../model/line.dart';
 
@@ -48,22 +49,32 @@ class DrawingPage extends GetView<DrawingController> {
   }
 
   /// 그림을 그릴 도화지 부분
-  Widget get _canvas => GestureDetector(
-    onScaleStart: controller.onScaleStart,
-    onScaleUpdate: controller.onScaleUpdate,
-    onScaleEnd: controller.onScaleEnd,
-    child: GetBuilder<DrawingController>(
-      id: _DrawingRefreshId.painter,
-      builder: (controller) {
-        return CustomPaint(
-          isComplex: true,
-          willChange: true,
-          foregroundPainter: _DrawingPainter(
-            lines: controller.lines,
-          ),
-          child: Container(color: Colors.transparent,),
-        );
-      },
+  // Widget get _canvas => GestureDetector(
+  //   onScaleStart: controller.onScaleStart,
+  //   onScaleUpdate: controller.onScaleUpdate,
+  //   onScaleEnd: controller.onScaleEnd,
+  //   child: GetBuilder<DrawingController>(
+  //     id: _DrawingRefreshId.painter,
+  //     builder: (controller) {
+  //       return CustomPaint(
+  //         isComplex: true,
+  //         willChange: true,
+  //         foregroundPainter: _DrawingPainter(
+  //           lines: controller.lines,
+  //         ),
+  //         child: Container(color: Colors.transparent,),
+  //       );
+  //     },
+  //   ),
+  // );
+
+  Widget get _canvas => Container(
+    constraints: const BoxConstraints.expand(),
+    color: Colors.transparent,
+    child: HandSignaturePainterView(
+      control: controller.handSignatureControl,
+      color: controller.color,
+      type: SignatureDrawType.shape,
     ),
   );
 

@@ -96,7 +96,6 @@ void _showStrokeWidthSlider({
               value: value,
               onChanged: onChanged,
               min: 1.0,
-
             ),
 
             GestureDetector(
