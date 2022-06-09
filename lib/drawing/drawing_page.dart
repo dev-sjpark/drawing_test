@@ -3,6 +3,7 @@ library drawing;
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
 import '../extensions.dart';
 import '../model/line.dart';
@@ -89,19 +90,22 @@ class DrawingPage extends GetView<DrawingController> {
       )]
     ),
     padding: EdgeInsets.fromLTRB(
-      16, 12, 16, Get.mediaQuery.viewPadding.bottom + 12,
+      24, 12, 24, Get.mediaQuery.viewPadding.bottom + 12,
     ),
     child: GetBuilder<DrawingController>(
       id: _DrawingRefreshId.mainPanel,
       builder: (controller) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: controller.color,
-              borderRadius: BorderRadius.circular(40),
+          GestureDetector(
+            onTap: () => controller.onTapMainPanelItem(ControlPanelType.color),
+            child: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: controller.color,
+                borderRadius: BorderRadius.circular(40),
+              ),
             ),
           ),
         ],

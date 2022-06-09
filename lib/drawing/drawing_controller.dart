@@ -17,10 +17,10 @@ class DrawingController extends GetxController {
   double strokeWidth = 3;
 
   /// 선 색상
-  Color color = Colors.black;
+  Color color = Colors.black[40];
 
   /// 현재 선택된 메인 패널 아이템의 인덱스
-  int? selectedPanelIndex;
+  ControlPanelType? selectedPanelIndex;
 
   /// 실제로 그려질 라인 목록
   final List<Line> lines = [];
@@ -53,25 +53,48 @@ class DrawingController extends GetxController {
 
   }
 
-  void onTapMainPanelItem(int index) {
-    selectedPanelIndex = index;
-    update([_DrawingRefreshId.mainPanel]);
+  void onTapMainPanelItem(ControlPanelType type) {
+    switch (type) {
+      case ControlPanelType.color:
+        _showColorPicker(
+          pickerColor: color,
+          onColorChange: (c) {
+            color = c;
+            update([_DrawingRefreshId.mainPanel]);
+          },
+        );
+        break;
+      case ControlPanelType.width:
+        _showStrokeWidthSlider(
+          value: strokeWidth,
+          onChanged: (value) {},
+        );
+        break;
+      case ControlPanelType.capType:
+        // TODO: Handle this case.
+        break;
+    }
   }
 
 }
 
 /// 컨트롤 패널에 들어갈 아이템의 종류
-enum _ControlPanelType {
+enum ControlPanelType {
+  /// 색상
   color,
 
+  /// 굵기
   width,
 
+  /// 끝점 형태
   capType,
 }
 
 /// 업데이트를 위해 사용하는 id
 enum _DrawingRefreshId {
+  /// 실제 canvas가 위치한 부분
   painter,
 
+  /// 주요 메인 패널
   mainPanel,
 }
